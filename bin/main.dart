@@ -31,7 +31,7 @@ void main(List<String> args) async {
         headers: {'Content-Type': 'application/json'},
       );
     })
-    ..all('/<ignored|.*>', (Request request) async {
+    ..all('/<path|.*>', (Request request) async {
       return _handleFatSecretProxy(request, tokenManager);
     });
 
