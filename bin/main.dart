@@ -64,18 +64,22 @@ Future<Response> _handleFatSecretProxy(
     // Get valid access token
     final accessToken = await tokenManager.getAccessToken();
 
-    // Build FatSecret URL using REST API format
-    final path = request.requestedUri.path.startsWith('/') 
-        ? request.requestedUri.path.substring(1) 
+    // Build FatSecret URL using method-based REST API format
+    final path = request.requestedUri.path.startsWith('/')
+        ? request.requestedUri.path.substring(1)
         : request.requestedUri.path;
     final queryParams = request.requestedUri.queryParameters;
-    
-    // FatSecret REST API endpoint
+
+    // Use server.api with method parameter (e.g., method=food.search.v3.1)
     final fatsecretUrl = Uri(
       scheme: 'https',
       host: 'platform.fatsecret.com',
-      path: '/rest/$path',
-      queryParameters: queryParams,
+      path: '/rest/server.api',
+      queryParameters: {
+        ...queryParams,
+        'method': path,
+        'format': 'json',
+      },
     );
 
     // Create headers with Bearer token
